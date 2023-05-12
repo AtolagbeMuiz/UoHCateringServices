@@ -1,0 +1,353 @@
+﻿
+
+@section scripts{
+
+}
+
+@{ ViewData["Title"] = "Payment Status";
+
+    <style>
+
+
+
+
+        .header {
+            position: unset !important;
+        }
+
+
+        .header-container {
+            background: url("/assets/about.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 200px;
+        }
+
+            .header-container > div {
+                position: relative;
+                top: 170px;
+            }
+
+
+
+        .funded {
+            background: url("/assets/volunteer.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 260px;
+        }
+
+
+        .figures-container div {
+            background: #FFFFFF;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.08);
+            height: 191px;
+            width: 45%;
+        }
+
+
+
+
+        .mission-card {
+            width: 32%;
+        }
+
+            .mission-card p {
+                font-size: 14px;
+            }
+
+        .active {
+            color: #DA443D !important;
+            width: 15%;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background: #FFF0EF;
+            border-radius: 20px;
+        }
+
+        .about {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 21px;
+        }
+
+        .grey {
+            background: #F2F2F2;
+        }
+
+        .font-weight {
+            font-weight: 600;
+        }
+
+        .pt-7 {
+            padding-top: 7rem;
+        }
+
+        .pb-7 {
+            padding-bottom: 7rem;
+        }
+
+
+
+        .danger-btn {
+            background: #DA443D;
+            border-radius: 30px;
+            outline: none;
+            border: none;
+            height: 40px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #D3D3D3;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: #DA443D;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background: #FFDCDC;
+        }
+
+
+
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+
+        .donate-amount {
+            background: #FFFFFF;
+            color: #DA443D;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+            .donate-amount:hover {
+                opacity: 0.6;
+            }
+
+        .recurringDonation {
+            display: none;
+        }
+
+        .together {
+            background: url("/assets/boy-rain.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 10px;
+        }
+
+
+
+        .multi-select {
+            position: relative;
+            max-width: 100%;
+            width: 100%;
+        }
+
+            .multi-select, .multi-select *, .multi-select *:before, .multi-select *:after {
+                box-sizing: border-box;
+            }
+
+        .multi-select_field, .multi-select_option {
+            background: #fff;
+            padding-left: 2px;
+        }
+
+        .multi-select_field {
+            position: relative;
+            height: 40px;
+            padding-left: 2px;
+            border: 1px solid #aaa;
+            line-height: 25px;
+            cursor: default;
+            border-radius: 10px;
+            padding-left: 10px;
+            padding-top: 5px;
+            background: #F2F2F2;
+        }
+
+            .multi-select_field:hover {
+                border-color: #888;
+            }
+
+            .multi-select_field:after {
+                content: '';
+                position: absolute;
+                right: 4px;
+                width: 0;
+                border-top: 4px solid #000;
+                border-right: 4px solid transparent;
+                border-left: 4px solid transparent;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .multi-select_field.is-empty {
+                color: #aaa;
+            }
+
+        .multi-select_options {
+            display: none;
+            position: absolute;
+            width: 100%;
+            max-height: 170px;
+            border-left: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            background: #fff;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+            overflow-x: hidden;
+        }
+
+        .is-active .multi-select_options {
+            display: block;
+        }
+
+        .multi-select_option {
+            background: transparent;
+            position: relative;
+            z-index: 101;
+            height: 30px;
+            line-height: 30px;
+        }
+
+            .multi-select_option:hover {
+                background: #f0f0f0;
+            }
+
+            .multi-select_option:not(:last-child) {
+                border-bottom: 1px solid #ddd;
+            }
+
+        .multi-select_label {
+            position: relative;
+        }
+
+        .multi-select_checkbox {
+            position: relative;
+            top: 2px;
+            margin-right: 4px;
+            z-index: 101;
+        }
+
+        .subscription-plan-container {
+            background: #FFFFFF;
+            box-shadow: 0px 10px 10px rgba(218, 68, 61, 0.2);
+            color: #333333;
+            border-radius: 10px;
+            max-width: 245px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+
+            .subscription-plan-container:hover {
+                color: #333333;
+            }
+    </style>
+}
+
+
+
+<div class="w-80 row mx-auto pt-4">
+
+    <div style="
+    height: 480px !important;
+" class="text-dark d-flex flex-column align-items-center w-100 py-5">
+
+
+        <div class=" ">
+            <div class="successmessage">
+
+                @if (ViewBag.paymentStatus == true)
+                {
+                    <div>
+                        <div class=" d-flex justify-content-center">
+                            <i style="font-size:10rem" class="fas text-success fa-check-circle"></i>
+                        </div>
+                        <p class="text-success mt-3" style="text-align:center">
+                            Payment Successful.
+
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <div class=" d-flex justify-content-center">
+                            <i style="font-size:10rem" class="fas fa-exclamation-triangle text-danger"></i>
+                        </div>
+                        <p class="text-danger" style="text-align:center">
+                            Your Payment was not successful<br>
+                            Try Again !!!
+                        </p>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+

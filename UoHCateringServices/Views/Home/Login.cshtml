@@ -1,0 +1,84 @@
+﻿@model UoHCateringServices.DTO.LoginDTO
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <script type="text/javascript" src="~/js/login.js"></script>
+}
+
+@{
+
+
+    ViewData["Title"] = "Login Page";
+    
+
+    <style>
+
+        .login-container {
+            background: #FFFFFF;
+            box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.12);
+            border-radius: 5px;
+            padding-bottom: 6rem !important;
+            position: relative;
+            left: 50%;
+        }
+
+            .login-container button {
+                background: #DA443D !important;
+                border-radius: 30px !important;
+            }
+
+        .btn:focus {
+            outline: none !important;
+            border: none !important;
+        }
+
+        .grey {
+            background: #F2F2F2;
+        }
+    </style>
+}
+
+<div class="login-container w-100 p-4 mt-4">
+
+    <form id="login-form" method="post" asp-action="Login" class="pt-4" asp-controller="Home" autocomplete="off">
+        <h2 class="head-size pb-4">Login</h2>
+
+        @if ((string)@ViewData["LoginMessage"] != null)
+        {
+            <div class="alert alert-danger " id="error" role="alert"> @ViewData["LoginMessage"]</div>
+        }
+
+
+
+        <div>
+            <label>Email</label>
+            <div class="form-group">
+                <input asp-for="Email" id="email" class="form-control grey" type="text" placeholder="Enter email"
+                       autocomplete="off"
+                       readonly
+                       onfocus="this.removeAttribute('readonly');" />
+            </div>
+            <span class="font-italic text-danger" asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label>Password</label>
+            <div class="form-group">
+                <input asp-for="Password" id="password" class="form-control grey" type="password" placeholder="Enter password" autocomplete="off"
+                       readonly
+                       onfocus="this.removeAttribute('readonly');" />
+            </div>
+            <span class="font-italic text-danger" asp-validation-for="Password"></span>
+        </div>
+
+        <div class="mb-2 "><a class="small text-primary" asp-controller="Home" asp-action="ForgotPassword">Forgot Password?</a></div>
+
+
+        <div><button id="login-btn" type="submit" onclick="logIn()" class="btn w-100 text-white submit  ">LOGIN</button></div>
+
+
+        <div class="pt-3">
+            <span>Don’t have an account? </span><a class="red font-weight-bold" href="/home/Index">Register</a>
+        </div>
+        <div id="errors" style="display:none" asp-validation-summary="All"></div>
+    </form>
+</div>

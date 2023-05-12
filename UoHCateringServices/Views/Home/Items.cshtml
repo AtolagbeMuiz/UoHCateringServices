@@ -1,0 +1,114 @@
+﻿@model List<Product>
+
+
+@{
+    Layout = "_Layout";
+
+
+    <style>
+
+
+        .btnJoinClub {
+            Margin-left: 40px
+        }
+
+        .cause-card-container {
+            background: #FFFFFF;
+            box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+            color: #000 !important;
+            width: 330px;
+            height: 300px !important;
+            position: relative;
+            border: 1px solid black;
+        }
+
+        .card-container:hover {
+            text-decoration: none;
+        }
+
+
+        .big {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+
+
+}
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+
+<div>
+    <a asp-controller="Home" asp-action="CartItems" style="color: #c11f27; text-decoration: none;">
+        <i class="fa-solid fa-cart-shopping" style="color: #c11f27;"></i>
+        Cart Items(@ViewBag.cartItemsCount)
+    </a>
+</div>
+
+<div class="tile is-ancestor" style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
+    <div class="tile is-vertical is-parent is-12">
+        <div class="tile">
+            <article class="tile is-child notification is-white" style="text-align: center;">
+                <p class="subtitle" style="font-family: 'IBM Plex Mono Light'"><strong>University Catering Services</strong> </p>
+                <p class="subtitle" style="font-family: 'IBM Plex Mono Light'">Please Select From The Options Below!</p>
+            </article>
+        </div>
+    </div>
+</div>
+
+<div class="tile is-ancestor" style="margin-top: 15px;">
+
+    <div class="tile is-vertical">
+        <div class="tile">
+            <div class="tile is-parent">
+
+                @if (Model.Count > 0)
+                {
+                    foreach (var product in Model)
+                    {
+
+                        <div class="d-flex flex-column mr-4 mb-3 cause-card-container block">
+                            <a asp-action="AddToCart" asp-controller="Home" asp-route-productId="@product.ProductId" asp-route-productName="@product.ProductName" asp-route-amount="@product.Amount" class="big"></a>
+
+                            <div style="height:40%;background-image: url('@product.ImagePath');background-size: contain;background-repeat: no-repeat;background-position: center"></div>
+
+                            <div class="d-flex flex-column p-3" style="height:60%">
+
+                                <span class="font-weight-bold pb-3" style="overflow:hidden; display: -webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1">
+                                    @product.ProductName
+
+                                </span>
+                                <span class="font-weight-bold pb-3" style="overflow:hidden; display: -webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1">
+                                    £@product.Amount
+
+                                </span>
+
+                                <a asp-controller="Home" asp-action="AddToCart" asp-route-productId="@product.ProductId" asp-route-productName="@product.ProductName" asp-route-amount="@product.Amount" class="badge badge-danger px-3 rounded-pill font-weight-normal" style="color:white">Add to Cart</a>
+
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                }
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

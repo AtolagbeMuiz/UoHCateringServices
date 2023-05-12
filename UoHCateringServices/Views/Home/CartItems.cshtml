@@ -1,0 +1,131 @@
+﻿@model List<Product>
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    var sandboxClientId = Configuration.GetSection("PayPalCredentials")["SandboxClientId"];
+    var url = $"https://www.paypal.com/sdk/js?client-id={sandboxClientId}&currency=GBP";
+}
+
+@{
+    Layout = "_Layout";
+
+}
+@if (Model != null)
+{
+    <div class="table-responsive" style="color: #828282;">
+
+        <table id="causes" class="table table-hover bg-light cell-border">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Product Name</th>
+                    <th>Amount</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <partial name="Cart_Items_Card" />
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex align-content-center">
+        @{ 
+            double amount = 0.0;
+
+            foreach(var cartItem in Model)
+            {
+                amount = amount + cartItem.Amount;
+            }
+        }
+        <div>
+            Cart Items: @Model.Count()
+        </div>
+
+        <div>
+            Total Amount : 	£@amount
+        </div>
+    </div>
+
+
+    <div>
+        <a style="display: flex; justify-content:center;align-items: center;height: 60px; width: 750px; margin-left: 180px; margin-bottom: 10px; " class="btn btn-success" asp-controller="Home" asp-action="PaymentStatus" asp-route-status="true">Pay by Cash</a>
+    </div>
+    //Paypal Javascript SDK Button render
+    <script src="@url"></script>
+
+    <div id="paypal-button-container" style="display: flex; justify-content: center; align-items: center;"></div>
+    <script>
+        paypal.Buttons({
+            // Order is created on the server and the order id is returned
+            createOrder() {
+
+                return fetch("/Payment/CreateOrder?amount=@amount", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+
+                })
+                    .then((response) => response.json())
+                    //.then((order) => { console.log(order); })
+                    //.then((order) => {return order.id });
+                    .then((order) => {
+                        const jsonData = JSON.parse(order);
+                        const id = jsonData['id'];
+                        console.log("<--orderID " + id);
+                        return id;
+
+                    })
+
+            },
+
+            // Finalize the transaction on the server after payer approval
+            //complete order and confirm payment
+            onApprove : function (data, actions) {
+            console.log("<--data order " + data.orderID);
+                let orderID = data.orderID;
+
+            return fetch("/Payment/CompleteOrder?orderID=" + orderID, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                //body: JSON.stringify({
+                //    orderID: ordid
+                //})
+            })
+                .then((response) => response.json())
+                .then((orderData) => {
+                    let paymentStatus = true;
+                    var url = "/Home/PaymentStatus?status=" + paymentStatus;
+                    window.location.href = url;
+
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    const transaction = orderData.purchase_units[0].payments.captures[0];
+                    alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+                    // When ready to go live, remove the alert and show a success message within this page. For example:
+                    // const element = document.getElementById('paypal-button-container');
+                    // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    // Or go to another URL:  window.location.href = 'thank_you.html';
+                });
+        }
+
+
+        }).render('#paypal-button-container');
+
+       
+    </script>
+}
+else
+{
+    <div class="d-flex flex-column align-items-center">
+        <img src="~/assets/no-club.svg" />
+        <h6 class="head-size pt-4">NO ITEM(S) IN CART YET</h6>
+        <a style="width:219px" asp-action="Items" asp-controller="Home" class="btn red-button">GET STARTED</a>
+
+    </div>
+}

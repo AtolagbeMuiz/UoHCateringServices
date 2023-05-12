@@ -1,0 +1,109 @@
+﻿@model UoHCateringServices.DTO.UserDTO
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+
+    <style>
+
+        .login-container {
+            background: #FFFFFF;
+            box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.12);
+            border-radius: 5px;
+            padding-bottom: 6rem !important;
+            position: relative;
+            left: 50%;
+        }
+
+        .submit-btn {
+            background: #DA443D !important;
+            border-radius: 30px !important;
+        }
+
+        .grey {
+            background: #F2F2F2;
+        }
+
+        pre {
+            overflow-x: auto;
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #registeredBody {
+            display: none;
+        }
+    </style>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<div class="login-container w-100 px-4 pt-2 pb-2 mt-4">
+    <form id="register" method="post" asp-controller="Home" name="myForm" asp-action="Index" class="pt-4">
+        <h2 class="head-size">Register</h2>
+        @if ((string)@ViewData["StatusMsg"] != null)
+        {
+            <div class="alert alert-danger " id="error" role="alert"> @ViewData["StatusMsg"]</div>
+        }
+        <div>
+
+            <label id="firstLabel">Name</label>
+            <div class="form-group">
+                <input asp-for="Name" name="Name" id="Name" class="form-control grey" type="text" placeholder="Enter Name" />
+
+            </div>
+            
+        </div>
+        <div>
+            <label>Email</label>
+            <div class="form-group">
+                <input name="Email" asp-for="Email" id="Email" class="form-control grey" type="text" placeholder="Enter email" />
+
+            </div>
+
+        </div>
+        
+        <div>
+            <label>Password</label>
+            <div class="form-group">
+                <input name="password" id="password" asp-for="Password" class="form-control grey" type="password" placeholder="Enter password" />
+
+            </div>
+
+        </div>
+        <div>
+            <label>Re enter Password</label>
+            <div class="form-group">
+                <input name="confirmPassword" asp-for="ConfirmPassword" class="form-control grey" type="password" placeholder="Re Enter Password" />
+
+            </div>
+
+        </div>
+
+
+      
+        <div><button id="register-btn" type="submit" class="btn submit-btn w-100 submit text-white">Register</button></div>
+        <div class="pt-3">
+            <span>Already have an account? </span><a class="red font-weight-bold" href="/home/Login">Login</a>
+        </div>
+
+    </form>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5f48e762ce58d10013c00d00&product=inline-share-buttons" async="async"></script>
+
+
+<script type="text/javascript" src="~/js/register.js"></script>
