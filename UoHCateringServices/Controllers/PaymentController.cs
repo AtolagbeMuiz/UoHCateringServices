@@ -17,18 +17,19 @@ namespace UoHCateringServices.Controllers
     {
         private readonly IConfiguration _config;
         private readonly ApiRoute _apiRoute;
+        Cart cart;
 
-        
 
-        public PaymentController(IConfiguration config, IOptionsSnapshot<ApiRoute> options)
+        public PaymentController(IConfiguration config, IOptionsSnapshot<ApiRoute> options, Cart _cart)
         {
             _config = config;
             _apiRoute = options.Value;
+            cart = _cart;
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(string amount)
+        public async Task<IActionResult> CreateOrder(string amount, string invoice_id)
         {
 
             //Get Config values
@@ -62,6 +63,20 @@ namespace UoHCateringServices.Controllers
 
             if(resp.StatusCode == System.Net.HttpStatusCode.OK && resp.IsSuccessStatusCode)
             {
+                ////fetch cart items
+                var items = cart.GetCartItems();
+                
+                var list = new List<Item>();
+                foreach (var it in items)
+                {
+                    list.Add(new Item { 
+                        name = it.ProductName,
+                        description = it.ProductName,
+                        quantity = it.Quantity,
+                        unit_amount = new UnitAmount { currency_code = "GBP", value = it.Amount.ToString()}
+                    });
+                }
+
                 var contentResponse = resp.Content.ReadAsStringAsync();
                 var responseResult = contentResponse.Result;
 
@@ -72,16 +87,27 @@ namespace UoHCateringServices.Controllers
                 PayPalOrder order = new PayPalOrder
                 {
                     intent = "CAPTURE",
-                    
+                    invoice_id = invoice_id,
+                    reference_id = invoice_id,
                     purchase_units = new[] {
-                
                         new PurchaseUnit
                         {
                             amount = new Amount
                             {
                                 currency_code = "GBP",
-                                value = amount
-                            }
+                                value = amount,
+
+                               breakdown = new Breakdown()
+                                {
+                                    item_total = new ItemTotal()
+                                    {
+                                        currency_code = "GBP",
+                                        value = amount
+                                    }
+                                }
+                            },
+                            items = list
+ 
                         }
                     }
                 };

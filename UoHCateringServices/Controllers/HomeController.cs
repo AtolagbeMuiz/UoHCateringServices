@@ -81,6 +81,10 @@ namespace UoHCateringServices.Controllers
             var cartItems = cart.GetCartItems();
             if(cartItems.Count > 0)
             {
+                //Generate  invoice id
+                var UniqueInvoiceId = ("UoH_" + DateTime.Today.Year + "_" + Guid.NewGuid()).ToString();
+                ViewBag.InvoiceId = UniqueInvoiceId;
+
                 return View(cartItems);
 
             }
@@ -89,14 +93,31 @@ namespace UoHCateringServices.Controllers
         }
 
         [HttpGet]
-        public IActionResult PaymentStatus(string status)
+        public IActionResult PaymentStatus(string status, string transactionId, string orderId, string InvoiceId, string paymentType)
         {
-            if(!string.IsNullOrEmpty(status))
+            if(!string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(InvoiceId))
             {
                 var paymentStatus = bool.Parse(status);
                 if(paymentStatus == true)
                 {
-                    ViewBag.paymentStatus = true;
+                    if(paymentType == "Paypal")
+                    {
+                        ViewBag.PaymentType = Enum.PaymentType.Paypal;
+
+                        ViewBag.transactionId = transactionId;
+                        ViewBag.orderId = orderId;
+                        ViewBag.InvoiceId = InvoiceId;
+                        ViewBag.paymentStatus = true;
+                    }
+                    else if(paymentType == "Cash")
+                    {
+                        ViewBag.PaymentType = Enum.PaymentType.Cash;
+
+
+                        ViewBag.InvoiceId = InvoiceId;
+                        ViewBag.paymentStatus = true;
+                    }
+                   
 
                 }
                 else

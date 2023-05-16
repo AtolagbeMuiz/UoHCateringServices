@@ -6,6 +6,8 @@
 @{
     var sandboxClientId = Configuration.GetSection("PayPalCredentials")["SandboxClientId"];
     var url = $"https://www.paypal.com/sdk/js?client-id={sandboxClientId}&currency=GBP";
+
+    string invoiceId = ViewBag.InvoiceId.ToString();
 }
 
 @{
@@ -14,6 +16,16 @@
 }
 @if (Model != null)
 {
+    @if (!string.IsNullOrEmpty(ViewBag.InvoiceId))
+    {
+       
+        <div>
+            Invoice ID: @invoiceId
+        </div>
+
+        <br />
+    }
+
     <div class="table-responsive" style="color: #828282;">
 
         <table id="causes" class="table table-hover bg-light cell-border">
@@ -33,10 +45,10 @@
     </div>
 
     <div class="d-flex align-content-center">
-        @{ 
+        @{
             double amount = 0.0;
 
-            foreach(var cartItem in Model)
+            foreach (var cartItem in Model)
             {
                 amount = amount + cartItem.Amount;
             }
@@ -52,7 +64,7 @@
 
 
     <div>
-        <a style="display: flex; justify-content:center;align-items: center;height: 60px; width: 750px; margin-left: 180px; margin-bottom: 10px; " class="btn btn-success" asp-controller="Home" asp-action="PaymentStatus" asp-route-status="true">Pay by Cash</a>
+        <a style="display: flex; justify-content:center;align-items: center;height: 60px; width: 750px; margin-left: 180px; margin-bottom: 10px; " class="btn btn-success" asp-controller="Home" asp-action="PaymentStatus" asp-route-status="true" asp-route-InvoiceId="@invoiceId" asp-route-paymentType="Cash">Pay by Cash</a>
     </div>
     //Paypal Javascript SDK Button render
     <script src="@url"></script>
@@ -63,7 +75,7 @@
             // Order is created on the server and the order id is returned
             createOrder() {
 
-                return fetch("/Payment/CreateOrder?amount=@amount", {
+                return fetch("/Payment/CreateOrder?amount=@amount" +"&invoice_id=@invoiceId", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -101,12 +113,29 @@
                 .then((response) => response.json())
                 .then((orderData) => {
                     let paymentStatus = true;
-                    var url = "/Home/PaymentStatus?status=" + paymentStatus;
-                    window.location.href = url;
+                    let InvoiceId = @Html.Raw(Json.Serialize(@invoiceId));
+                    
 
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                    const transaction = orderData.purchase_units[0].payments.captures[0];
-                    alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+
+                    const jsonData = JSON.parse(orderData);
+                    let ordid = jsonData['id'];
+                    //const transid = jsonData.purchase_units.payments.captures.id;
+                    console.log("id ord " + ordid);
+                    console.log("PaymentID " + jsonData.purchase_units[0].payments.captures[0].id)
+
+                    let transactionId = jsonData.purchase_units[0].payments.captures[0].id;
+                    let paymenttype = "Paypal";
+                    //console.log("transa " + transid);
+
+                    //const transaction = orderData.purchase_units[0].payments.captures[0];
+                    //console.log("trans " + transaction.id)
+                    //console.log("status " + transaction.status)
+                    var url = "/Home/PaymentStatus?status=" + paymentStatus + "&transactionId=" + transactionId + "&orderId=" + ordid + "&InvoiceId=" + InvoiceId + "&paymentType=" + paymenttype;
+
+                     window.location.href = url;
+
+                    //alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
                     // When ready to go live, remove the alert and show a success message within this page. For example:
                     // const element = document.getElementById('paypal-button-container');
                     // element.innerHTML = '<h3>Thank you for your payment!</h3>';
@@ -117,7 +146,7 @@
 
         }).render('#paypal-button-container');
 
-       
+
     </script>
 }
 else

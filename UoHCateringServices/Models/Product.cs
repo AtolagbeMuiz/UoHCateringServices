@@ -11,5 +11,7 @@ namespace UoHCateringServices.Models
         public string ProductName { get; set; }
         public string ImagePath { get; set; }
         public double Amount { get; set; }
+
+        public string Quantity { get; set; } = "1";
     }
 }
