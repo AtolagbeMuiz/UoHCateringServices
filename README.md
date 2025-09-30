@@ -15,7 +15,7 @@ Paypal also continues to monitor API credentials to ensure the validity and its 
 In this project, there are three(3) paypal REST API endpoints that were consumed using C#/.NET and they are as follows:
 Authentication (https://api-m.sandbox.paypal.com/v1/oauth2/token): This endpoint was consumed using .NET HttpClient. Which was set up to use the Basic authentication scheme. In this instance, the Client Id and Secret Key were used to set up the authorization request header. These credentials (Client Id and Secret Key) are therefore encoded into a base64-encoded string. The endpoint also takes a query parameter “grant_type=client_credentials” as “x-ww-form-urlencoded”.
 
-![](/UoHCateringServices/wwwroot/assets/1)
+![](/UoHCateringServices/wwwroot/assets/1.png)
 
 
 The format of response from endpoint request for access token for authorization is json as shown below
