@@ -20,6 +20,8 @@ Authentication (https://api-m.sandbox.paypal.com/v1/oauth2/token): This endpoint
 
 The format of response from endpoint request for access token for authorization is json as shown below
 
+![](/UoHCateringServices/wwwroot/assets/2.png)
+
 
 
 Create order (https://api-m.sandbox.paypal.com/v2/checkout/orders) : This endpoint is responsible for creating order (payment) for a specific order from the catering services application when an order is placed. The http request header for the create order endpoint takes an access_token as the authorization header, content-type of “application/json” and the request body of this endpoint is of JSON format type.
@@ -28,20 +30,28 @@ The request body for the API endpoint is of type json which is key/value pair. I
 
 
 
+![](/UoHCateringServices/wwwroot/assets/3.png)
 
 
 The screenshot below shows the request header information and how the http request is sent to the create order endpoint.
 
+![](/UoHCateringServices/wwwroot/assets/4.png)
+
 
 The response from the capture order endpoint is also in the format of json and the endpoint also returns the HTTP status code 201 as the order id created. Attached below is the response from that endpoint.
 
+![](/UoHCateringServices/wwwroot/assets/5.png)
 
 
 Capture Order (https://api-m.sandbox.paypal.com/v2/checkout/orders/{id}/capture) : This endpoint captures the order and it takes the order id as the path parameter and also takes “access_token” or paypal Client Id and Secret Key as the authorization on the request header.
 
+![](/UoHCateringServices/wwwroot/assets/6.png)
+
 
 The response format from the endpoint is of type json and it returns the HTTP status code
 201. The returned response includes the order id, transaction status and the payer details.
+
+![](/UoHCateringServices/wwwroot/assets/7.png)
 
 
 
@@ -53,7 +63,7 @@ The subsequent protocol is between the vendor and Paypal whereby the vendor send
 
 The other protocol between the buyer and paypal involves the point buyer being redirected to the paypal payment page to enter payment information or card details to complete the payment and the payment status is returned to the vendor’s website.
 
-
+![](/UoHCateringServices/wwwroot/assets/8.png)
 
 The Paypal Event processes between the buyer, vendor and paypal is explained in the diagram above.
 
@@ -73,6 +83,8 @@ This can also be further observed on the API endpoint that captures order, this 
 ## Part II
 
 Authentication Encryption: This can be described as a cryptographic technique that consists of encryption and authentication while promoting Confidentiality, Integrity and Authenticity (C.I.A) of exchanged data. This concept ensures that API resources/endpoints are protected from requests that are unauthorized. AES encryption algorithm can be used to achieve this. As shown below is the symmetric encryption algorithm for encrypting password during registration before it is saved to the database.
+
+![](/UoHCateringServices/wwwroot/assets/9.png)
 
 
 When a registered user wants to log in, the provided password is encrypted and this encrypted text is compared to what is saved on the database before authenticating the user.
